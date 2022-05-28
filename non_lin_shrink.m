@@ -1,7 +1,6 @@
 function [Z, dhat, tauhat]=non_lin_shrink(s2)
-s2 = strrep(s2,'/','\');
-s1 = 'C:\Users\52999\Desktop\MatrixOptim\';
-s = strcat(s1,s2);
+% s2 = strrep(s2,'/','\');
+s = strcat(s2);
 s3 = '.csv';
 sA = strcat(s,s3);
 A = readmatrix(sA);
