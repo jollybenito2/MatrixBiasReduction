@@ -24,7 +24,14 @@ from statsmodels.tsa.stattools import adfuller
 from scipy.stats import shapiro
 from scipy.stats import ks_2samp  
 from scipy.stats import jarque_bera
+import os
 import seaborn as sns
+import platform
+
+_system = platform.system()
+
+# CHANGE MOST np.ones for the return of the next out of sample scenario
+# CHANGE MOST np.ones for RANDOM UNIFORM UNIT SPHERE
 
 #----------------------------------------------------
 # MARCENKO PASTUR PDF
@@ -331,7 +338,11 @@ def QUEST(corr, n, name):
     """
     lambdas,vectors=np.linalg.eigh(corr)  
     eng = matlab.engine.start_matlab()
-    eng.non_lin_shrink(name,nargout=0)
+    path_dir = os.getcwd()
+    matlab_name = path_dir + '/' + name
+    if (_system == "Windows"):
+        matlab_name.replace("")
+    eng.non_lin_shrink(matlab_name,nargout=0)
     eng.pause(1)
     namef1=name+"_NonlinearShrink"+".csv"
     CovarianceEst=np.array(pd.read_csv(namef1, header=None))
@@ -1025,7 +1036,7 @@ def main(name, method, descriptive, alpha=.995, p=100, nFact=50, double_q=2, qma
     else:
         print("Real")
         string3=name+".csv"
-        name = name + "_" + str(test) + "q"
+        name = name + "_" + str("%.2f" % round(test, 2)) + "q"
         X =  pd.read_csv(string3)
         # Eliminates first column, because it's the index.
         return_vec = X.drop(X.columns[[0]], axis=1)     
@@ -1204,7 +1215,7 @@ def main(name, method, descriptive, alpha=.995, p=100, nFact=50, double_q=2, qma
     return(Covariances, cov0, VAR_)
 
 # -------------------------------------------------------------------------------
-
+"""
 q_test = [100, 10, 2, 11/10]
 sizes = [150,120, 100, 80, 50]
 nFact_size = 50
@@ -1218,8 +1229,11 @@ for p_size in sizes:
                                       double_q=int(test*2),
                                       portfolio = "MinVar", qmax=int(test*2))
 
+
+
 """
-q_test = [100, 10, 2, 11/10]
+q_test = [100, 10, 2, 10/9]
+q_test = [10, 2, 4/3, 10/9]
 name = "Data_Storage/BMV/BMV"
 descriptive = False
 method="Real"
@@ -1227,4 +1241,7 @@ for test in q_test:
     Covariances, cov0, Risks=main(name, method, descriptive, 
                                   double_q=int(test*2),
                                   portfolio = "MinVar", qmax=int(test*2))
-"""
+
+duration = 1  # seconds
+freq = 440  # Hz
+os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))

@@ -116,8 +116,9 @@ def graph_main(name):
 
 
 q_test = [100, 10, 2, 11/10]
-sizes = [150,120, 100, 80, 50]
+sizes =  [150,120, 100, 80, 50]
 nFact_size = 50
+"""
 for p_size in sizes:  
     for test in q_test: 
         name = "Data_Storage/Synth_" + str(p_size) + "obs/" + str(p_size) + "obs_" + str(test) + "q_" + str(nFact_size) + "s"
@@ -125,8 +126,8 @@ for p_size in sizes:
 
 """    
 q_test = [100, 10, 2, 11/10]
+q_test = [10, 2, 4/3, 10/9]
 for test in q_test: 
     name = "Data_Storage/BMV/BMV"
-    name = name + "_" + str(test) + "q"
+    name = name + "_" + str("%.2f" % round(test, 2)) + "q"
     graph_main(name)
-"""
