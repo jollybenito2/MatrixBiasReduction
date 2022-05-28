@@ -7,33 +7,25 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from sklearn.preprocessing import StandardScaler
-import warnings
 import os
-from sklearn.experimental import enable_iterative_imputer
+
 from sklearn.impute import IterativeImputer
 ######################################
 # warnings.filterwarnings("ignore")
 
 
-output_dir = 'C:/Users/52999/Desktop/MatrixOptim/OnlyBMV_Minutes/'
+output_dir = 'BMV_Days/'
 
-df = pd.read_csv("OnlyBMV_Minutes/KOF.csv")[["Datetime"]]
-for x in range(df.shape[0]):
-    df['Datetime'][x] = datetime.strptime(df.copy()['Datetime'][x][:19], '%Y-%m-%d %H:%M:%S') 
+df = pd.read_csv("BMV_Days/KOF.csv")[["Date"]]
 
 #k=0
 # Read ALL CSV in folder
 for filename in os.listdir(output_dir):
     if filename.endswith(".csv"):
-        f = pd.read_csv('OnlyBMV_Minutes/' + filename, header=0)[["Datetime","Close"]]
-        f.columns = ["Datetime", filename.strip(".csv")]
-        for x in range(f.shape[0]):
-            f['Datetime'][x] = datetime.strptime(f.copy()['Datetime'][x][:19], '%Y-%m-%d %H:%M:%S') 
-        
-        if (f.shape[0]>3000):
-            df = pd.merge(df, f, "left")        
-            
-          
+        f = pd.read_csv('BMV_Days/' + filename, header=0)[["Date","Close"]]
+        f.columns = ["Date", filename.strip(".csv")]
+        df = pd.merge(df, f, "left")   
+                 
 for y in df.columns:
     if ((df.isnull().sum()/df.shape[0])[y] >= 0.5):
         df = df.drop(y, axis=1)
@@ -41,7 +33,7 @@ for y in df.columns:
 imp = IterativeImputer(max_iter=10, random_state=0)
 imp.fit(df.iloc[:,1:])
 Imp_df = pd.DataFrame(imp.transform(df.iloc[:,1:]), columns = df.columns[1:])
-Imp_df["date"] = df['Datetime']
+Imp_df["date"] = df['Date']
 
 RAWDataMatrix=Imp_df.dropna()
 RAWDataMatrix.to_csv('Data_Storage/BMV/BMV.csv')
