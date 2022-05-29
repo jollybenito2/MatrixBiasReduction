@@ -15,5 +15,5 @@ The main function in the code does the following:
   - It calculates metrics to determine the bias reduction with the in-sample data vs the true covariance (with the real data the out-sample is used to create a simulation for the true covariance).
   - It also calculates financial metrics for the portfolio performance.
 
-  Then a secondary function (GraphFF) will create frontier efficient frontiers for the matrices, for a proper visualization of the results.
+  Then a secondary function (GraphFF) will create efficient frontiers for the matrices, for a proper visualization of the results.
   This code also includes other codes mainly for data collection (WebScraper) and data cleaning (Preprocess) for the real scenarios. 
